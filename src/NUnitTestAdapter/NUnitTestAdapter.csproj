@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NUnit.VisualStudio.TestAdapter</RootNamespace>
     <AssemblyName>NUnit.VisualStudio.TestAdapter</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -49,10 +49,13 @@
     <DelaySign>false</DelaySign>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.VisualStudio.TestPlatform.ObjectModel">
+    <Reference Include="Microsoft.VisualStudio.TestPlatform.ObjectModel, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(MSBuildProgramFiles32)\Microsoft Visual Studio 11.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\Microsoft.VisualStudio.TestPlatform.ObjectModel.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\Microsoft.VisualStudio.TestPlatform.ObjectModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Nett, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62d0048d55e90461, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Nett.StrongNamed.0.4.0\lib\Net40\Nett.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="nunit.core">
       <SpecificVersion>False</SpecificVersion>
@@ -72,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyRunner.cs" />
+    <Compile Include="Config.cs" />
     <Compile Include="Internal\AsyncMethodHelper.cs" />
     <Compile Include="Internal\Stackframe.cs" />
     <Compile Include="Internal\StackframeParser.cs" />
@@ -96,6 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="NUnitAdapter.snk" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

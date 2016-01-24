@@ -1,7 +1,7 @@
 ﻿// ****************************************************************
 // Copyright (c) 2011 NUnit Software. All rights reserved.
 // ****************************************************************
-// #define LAUNCHDEBUGGER
+ //#define LAUNCHDEBUGGER
 using System.Collections.Generic;
 #if LAUNCHDEBUGGER
 using System.Diagnostics;
@@ -17,7 +17,7 @@ using NUnit.Util;
 namespace NUnit.VisualStudio.TestAdapter
 {
     using System;
-
+    using Nett;
     [FileExtension(".dll")]
     [FileExtension(".exe")]
     [DefaultExecutorUri(NUnitTestExecutor.ExecutorUri)]
@@ -38,9 +38,30 @@ namespace NUnit.VisualStudio.TestAdapter
             // Ensure any channels registered by other adapters are unregistered
             CleanUpRegisteredChannels();
 
+            // var initPath = Path.Combine(Environment.CurrentDirectory, "init.tml");
+
+            var initPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "NUnitTestAdapter");
+            initPath = Path.Combine(initPath, "init.tml");
+
+            var blackList = new List<string>();
+            if (File.Exists(initPath))
+            {
+                var config = Toml.ReadFile<Configuration>(initPath);
+                blackList = config.Blacklist.Select(b => b.ToLowerInvariant()).ToList();
+            }
+           
+
             foreach (string sourceAssembly in sources)
             {
+                if (blackList.Contains(Path.GetFileName(sourceAssembly.ToLowerInvariant())))
+                {
+                    TestLog.SendDebugMessage("Ignore " + sourceAssembly);
+                    continue;
+                }
+
                 TestLog.SendDebugMessage("Processing " + sourceAssembly);
+
+                //config.Blacklist.Add(sourceAssembly);
 
                 TestRunner runner = new TestDomain();
                 var package = CreateTestPackage(sourceAssembly);
@@ -90,6 +111,8 @@ namespace NUnit.VisualStudio.TestAdapter
                     runner.Unload();
                 }
             }
+
+            //Toml.WriteFile(config, @"test.tml");
 
             Info("discovering test", "finished");
         }
